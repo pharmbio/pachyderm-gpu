@@ -1,0 +1,28 @@
+{
+  "pipeline": {
+    "name": "mygpu"
+  },
+  "transform": {
+    "image": "novella/tensorflow-pachyderm:gputest",
+    "cmd": [ "/bin/bash" ],
+    "stdin": [
+      "python /code/gpu.py > /pfs/out/output-logs.txt",
+      "ls /pfs/data > /pfs/out/input-data.txt"
+    ]
+  },
+  "resource_limits": {
+    "memory": "2.0G",
+    "cpu": 2,
+    "gpu": 1
+  },
+  "resource_requests": {
+      "gpu": 1
+  },
+  "input": {
+    "atom": {
+      "repo": "data",
+      "glob": "/"
+    }
+  }
+}
+
