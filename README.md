@@ -10,9 +10,10 @@ In this page we introduce how to run a simple Tensorflow GPU-enabled pipeline us
 
 ## Prerequisites
 
-- A Kubernetes cluster with dynamic provisioning of volumes
+- A Kubernetes cluster with dynamic provisioning of volumes (v 1.10+)
 - [NVIDIA drivers via package manager](https://www.nvidia.com/object/unix.html) or via [containers](https://github.com/NVIDIA/nvidia-docker/wiki/Driver-containers-(EXPERIMENTAL))
 - [nvidia-docker2 setup on your machine](https://github.com/NVIDIA/nvidia-docker)
+- [NVIDIA device plugin for Kubernetes](https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v1.10/nvidia-device-plugin.yml)
 
 ## Deploy Pachyderm on Kubernetes
 
