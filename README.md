@@ -100,7 +100,6 @@ You can run a pipeline stage using:
 
 ```bash
 kubectl edit rc -n pachyderm <pipeline-rc-name>
-kubectl delete pods -n pachyderm --selector='app=<pipeline-rc-name>'
 ```
 ```JSON
 resources:
