@@ -96,6 +96,30 @@ You can run a pipeline stage using:
 ```bash
 > pachctl create-pipeline -f <JSON file>
 ```
+> **NOTE:** Currently Pachyderm does not support the latest NVIDIA Kubernetes drivers. This means we need to do a hack to make our pipelines request GPU resources. As of today, Pachyderm requests for `alpha.kubernetes.io/nvidia-gpu`, whereas GPU resources are defined as `nvidia.com/gpu`. Therefore, we need to replace the annotation in the replication controller of the pipeline.
+
+```bash
+kubectl edit rc -n pachyderm <pipeline-rc-name>
+kubectl delete pods -n pachyderm --selector='app=<pipeline-rc-name>'
+```
+```JSON
+resources:
+          limits:
+       ---> alpha.kubernetes.io/nvidia-gpu: "1"   to   nvidia.com/gpu: "1" 
+            cpu: "2"
+            memory: 2G
+          requests:
+       ---> alpha.kubernetes.io/nvidia-gpu: "1"   to   nvidia.com/gpu: "1" 
+            cpu: "0"
+            memory: 64M
+```
+Afterwards, we can delete all pods managed by our pipeline's replication controller. This will make the Kubernetes scheduler restart all pods from a given pipeline.
+
+```bash
+kubectl delete pods -n pachyderm --selector='app=<pipeline-rc-name>'
+```
+
+
 What happens after you create a pipeline? Creating a pipeline tells Pachyderm to run your code on every finished commit in a repo as well as all future commits that happen after the pipeline is created. Our repo already had a commit, so Pachyderm automatically launched a job (Kubernetes pod) to process that data. This first time it might take some extra time since it needs to download the image from a container image registry. You can view the pipeline status and its corresponding logs using:
 ```bash
 > pachctl list-pipeline
