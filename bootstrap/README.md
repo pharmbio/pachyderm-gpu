@@ -34,7 +34,7 @@ You can access the dashboard by starting a proxy server on Minikube and forwardi
 
 > **NOTE:** The private key can be found under the `.vagrant` directory, which is located at the same directory as the Vagrantfile. It is recommended to move it to your ssh directory `~/.ssh/.` Make sure you add it to the key chain.
 
-Once you have created the tunnel, execute:
+Once you have created the tunnel, execute the following command in the Vagrant guest host:
 
 ```bash
 > sudo kubectl proxy
