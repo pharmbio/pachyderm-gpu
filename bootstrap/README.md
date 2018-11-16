@@ -19,8 +19,8 @@ First ssh into the Vagrant guest machine and invoke the following commands:
 ```bash
 > vagrant ssh
 > cd bootstrap
-> sudo sh setup.sh
-> sudo sh start-pachd.sh
+> sh setup.sh
+> sh start-pachd.sh
 ```
 
 ## Accessing the Kubernetes dashboard
@@ -28,9 +28,13 @@ First ssh into the Vagrant guest machine and invoke the following commands:
 You can access the dashboard by starting a proxy server on Minikube and forwarding the traffic to the host via a ssh tunnel: 
 
 ```bash
-> ssh -L 8001:127.0.0.1:8001 vagrant@localhost -p 2222 -i ~/.ssh/insecure_private_key
+> ssh-add ~/.ssh/private_key
+> ssh -L 8001:127.0.0.1:8001 vagrant@localhost -p 2222 -i ~/.ssh/private_key
 > sudo kubectl proxy
 ```
+
+> **NOTE:** The private key can be found under the `.vagrant` directory, which is located at the same directory as the Vagrantfile. It is recommended to move it to your ssh directory `~/.ssh/.` Make sure you add it to the key chain.
+
 
 And on your local machine simply:
 

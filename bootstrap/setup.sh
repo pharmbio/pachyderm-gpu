@@ -42,3 +42,9 @@ sudo minikube start --vm-driver=none --memory 8192 --cpus 4
 
 # Start Helm client and daemon
 sudo helm init
+
+# Give vagrant ownership of kubernetes binaries
+export USER= $(whoami)
+
+sudo chown -R $USER:$USER .minikube/
+sudo chown -R $USER:$USER .kube/
