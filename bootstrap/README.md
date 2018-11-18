@@ -25,14 +25,15 @@ First ssh into the Vagrant guest machine and invoke the following commands:
 
 ## Accessing the Kubernetes dashboard
 
-You can access the dashboard by starting a proxy server on Minikube and forwarding the traffic to the host via a ssh tunnel. Run the following commands from your local machine: 
+You can access the dashboard by starting a proxy server on Minikube and forwarding the traffic to the host via a ssh tunnel. Run the following commands from your local machine.
+
+> **NOTE:** The private key can be found under the `.vagrant` directory, which is located at the same directory as the Vagrantfile. Make sure you add it to the key-chain.
 
 ```bash
-> ssh-add ~/.ssh/private_key
-> ssh -L 8001:127.0.0.1:8001 vagrant@localhost -p 2222 -i ~/.ssh/private_key
+> export PRIVATE_KEY=$(vagrant ssh-config | grep IdentityFile | cut -f 4 -d ' ')
+> ssh-add $PRIVATE_KEY
+> ssh -L 8001:127.0.0.1:8001 vagrant@localhost -p 2222 -i $PRIVATE_KEY
 ```
-
-> **NOTE:** The private key can be found under the `.vagrant` directory, which is located at the same directory as the Vagrantfile. It is recommended to move it to your ssh directory `~/.ssh/.` Make sure you add it to the key chain.
 
 Once you have created the tunnel, execute the following command in the Vagrant guest host:
 
