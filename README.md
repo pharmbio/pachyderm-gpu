@@ -108,7 +108,7 @@ You can run a pipeline stage using:
 > **NOTE II:** Currently Pachyderm does not support the latest NVIDIA Kubernetes drivers. This means we need to do a hack to make our pipelines request GPU resources. As of today, Pachyderm requests for `alpha.kubernetes.io/nvidia-gpu`, whereas GPU resources are defined as `nvidia.com/gpu`. Therefore, we need to replace the annotation in the replication controller of the pipeline.
 
 ```bash
-kubectl edit rc -n pachyderm <pipeline-rc-name>
+> kubectl edit rc -n pachyderm <pipeline-rc-name>
 ```
 ```JSON
 resources:
@@ -124,7 +124,7 @@ resources:
 Afterwards, we can delete all pods managed by our pipeline's replication controller. This will make the Kubernetes scheduler restart all pods from a given pipeline.
 
 ```bash
-kubectl delete pods -n pachyderm --selector='app=<pipeline-rc-name>'
+> kubectl delete pods -n pachyderm --selector='app=<pipeline-rc-name>'
 ```
 
 
@@ -164,7 +164,7 @@ Pachyderm uses a Data Repository within its File System. This means that it will
 
 Pipelines automatically process the data as new commits are finished. Think of pipelines as being subscribed to any new commits on their input repositories. Similarly to Git, commits have a parental structure that tracks which files have changed.
 
-Let’s create a new commit in a parental structure. To do this we will simply do ome more put-file command with -c and by specifying master as the branch, it will automatically parent our commits onto each other. Branch names are just references to a particular HEAD commit.
+Let’s create a new commit in a parental structure. To do this we will simply do ome more `put-file` command with `-c` and by specifying master as the branch, it will automatically parent our commits onto each other. Branch names are just references to a particular `HEAD` commit.
 ```bash
 > cd ./<my/folder/with/more/data>
 ```
