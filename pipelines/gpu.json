@@ -1,6 +1,6 @@
 {
   "pipeline": {
-    "name": "mygpu"
+    "name": "mypipeline"
   },
   "transform": {
     "image": "novella/tensorflow-pachyderm:gputest",
@@ -10,6 +10,7 @@
       "ls /pfs/data > /pfs/out/input-data.txt"
     ]
   },
+  "standby": true,
   "resource_limits": {
     "memory": "2.0G",
     "cpu": 2,
@@ -25,4 +26,3 @@
     }
   }
 }
-
