@@ -99,7 +99,7 @@ You can run a pipeline stage using:
 > pachctl create-pipeline -f <JSON file>
 ```
 
-> **NOTE:** Does your Kubernetes cluster have access to GPU resources? If not, you should either remove the GPU requests/limits specifications fromn your pipeline or install the NVIDIA drivers on your cluster. You can run the following command to verify this. If it has access, you should see an output similar to the following: `nvidia.com/gpu: "10"`.
+> **NOTE I:** Does your Kubernetes cluster have access to GPU resources? If not, you should either remove the GPU request/limit specifications from your pipeline or install the NVIDIA drivers on your cluster. You can run the following command to verify this. If it does have access, you should see an output similar to the following: `nvidia.com/gpu: "10"`.
 
 ```bash
 > kubectl get nodes -o yaml | grep gpu 
