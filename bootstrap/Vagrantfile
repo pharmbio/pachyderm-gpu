@@ -6,8 +6,9 @@ projectroot = File.dirname(__FILE__)
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/xenial64"
   config.ssh.insert_key = true
+  config.vm.synced_folder "./scripts", "/home/vagrant/tutorial", create: true, group: "vagrant", owner: "vagrant"
   config.vm.provider "virtualbox" do |v|
-        v.memory = 8192
+        v.memory = 4096
         v.cpus = 4
     end
 end

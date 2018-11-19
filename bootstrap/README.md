@@ -18,9 +18,9 @@ After cloning this repository, start the Vagrant box using the following command
 First ssh into the Vagrant guest machine and invoke the following commands:
 ```bash
 > vagrant ssh
-> cd bootstrap
-> sh setup.sh
-> sh start-pachd.sh
+> cd tutorial
+> sudo sh setup.sh
+> sudo sh start-pachd.sh
 ```
 
 ## Accessing the Kubernetes dashboard
@@ -38,7 +38,7 @@ You can access the dashboard by starting a proxy server on Minikube and forwardi
 Once you have created the tunnel, execute the following command in the Vagrant guest host:
 
 ```bash
-> sudo kubectl proxy
+> kubectl proxy
 ```
 
 You can access the dashboard your local machine by simply:
