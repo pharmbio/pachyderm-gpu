@@ -17,6 +17,8 @@ In this page we introduce how to run a simple Tensorflow GPU-enabled pipeline us
 
 ## Deploy Pachyderm on Kubernetes
 
+> **NOTE:** You can skip this step if you followed the instructions for setting up a Vagrant box. 
+
 Deploy the Kubernetes Package Manager on your newly instantiated cluster:  
 ```bash
 > kubectl -n kube-system create sa tiller
@@ -59,7 +61,7 @@ Now push the data into the repository you created in the previous step:
 ```
 This will create a new commit on the repository including the data we previously downloaded.
 
-### Running a GPU-enabled Pachyderm pipeline
+### Running a Pachyderm pipeline
 
 Once your data is in the repository, you are ready to start a bunch of pipelines cranking through data in a distributed fashion. Pipelines are the core processing primitive in Pachyderm and they’re specified with a JSON encoding. Explore the pipelines folder and find out what the input field means:
 ```JSON
@@ -81,7 +83,7 @@ Take a look at the resource allocation and limits directives. Here you can reque
       "gpu": 1
   },
 ```
-The image used in this pipeline stage is a customised tensorflow image derived from `tensorflow/tensorflow:1.12.0-gpu` which was defined in the Dockerfile under the `docker` directory. The `gpu.py` script simply prints out information about the available CPU/GPU devices to perform the computation, and redirect it to a output file. Alsp, we print the output of a `ls` command and redirect it to a different file.
+The image used in this pipeline stage is a customised tensorflow image derived from `tensorflow/tensorflow:1.12.0-gpu` which was defined in the Dockerfile under the `docker` directory. The `gpu.py` script simply prints out information about the available CPU/GPU devices to perform the computation, and redirect it to a output file. Also, we print the output of a `ls` command and redirect it to a different file.
 ```JSON
   "transform": {
     "image": "novella/tensorflow-pachyderm:gputest",
@@ -96,7 +98,14 @@ You can run a pipeline stage using:
 ```bash
 > pachctl create-pipeline -f <JSON file>
 ```
-> **NOTE:** Currently Pachyderm does not support the latest NVIDIA Kubernetes drivers. This means we need to do a hack to make our pipelines request GPU resources. As of today, Pachyderm requests for `alpha.kubernetes.io/nvidia-gpu`, whereas GPU resources are defined as `nvidia.com/gpu`. Therefore, we need to replace the annotation in the replication controller of the pipeline.
+
+> **NOTE:** Does your Kubernetes cluster have access to GPU resources? If not, you should either remove the GPU requests/limits specifications fromn your pipeline or install the NVIDIA drivers on your cluster. You can run the following command to verify this. If it has access, you should see an output similar to the following: `nvidia.com/gpu: "10"`.
+
+```bash
+> kubectl get nodes -o yaml | grep gpu 
+```
+
+> **NOTE II:** Currently Pachyderm does not support the latest NVIDIA Kubernetes drivers. This means we need to do a hack to make our pipelines request GPU resources. As of today, Pachyderm requests for `alpha.kubernetes.io/nvidia-gpu`, whereas GPU resources are defined as `nvidia.com/gpu`. Therefore, we need to replace the annotation in the replication controller of the pipeline.
 
 ```bash
 kubectl edit rc -n pachyderm <pipeline-rc-name>
@@ -164,7 +173,7 @@ Let’s create a new commit in a parental structure. To do this we will simply d
 ```
 Did any new job get triggered? What data is being processed now? All available data or just new data? Explore which new commits have been made as a result of the new input data. 
 ```bash
-> pachctl list-commit <repo-name>
+> pachctl list-commit data
 ```
 You can inspect additional information about a job like this:
 ```bash
