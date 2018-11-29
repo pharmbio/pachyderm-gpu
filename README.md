@@ -19,7 +19,7 @@ In this page we introduce how to run a simple Tensorflow GPU-enabled pipeline us
 
 > **NOTE:** You can skip this step if you followed the instructions for setting up a Vagrant box. 
 
-Deploy the Kubernetes Package Manager on your newly instantiated cluster:  
+Deploy Helm (Kubernetes Package Manager) on your newly instantiated cluster:  
 ```bash
 > kubectl -n kube-system create sa tiller
 > kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
