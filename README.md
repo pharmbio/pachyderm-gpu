@@ -73,17 +73,6 @@ Once your data is in the repository, you are ready to start a bunch of pipelines
     }
   }
 ```
-Take a look at the resource allocation and limits directives. Here you can request GPU/CPU resources for the Pachyderm jobs:
-```JSON
-  "resource_limits": {
-    "memory": "1G",
-    "cpu": 1,
-    "gpu": 1
-  },
-  "resource_requests": {
-      "gpu": 1
-  },
-```
 The image used in this pipeline stage is a customised tensorflow image derived from `tensorflow/tensorflow:1.12.0-gpu` which was defined in the Dockerfile under the `docker` directory. The `gpu.py` script simply prints out information about the available CPU/GPU devices to perform the computation, and redirect it to a output file. Also, we print the output of a `ls` command and redirect it to a different file.
 ```JSON
   "transform": {
@@ -95,7 +84,6 @@ The image used in this pipeline stage is a customised tensorflow image derived f
     ]
   },
   ```
-
 Currently Pachyderm does support the latest NVIDIA Kubernetes drivers. Here it is shown how to limit GPU resources used by the pipeline:
 
 ```JSON
