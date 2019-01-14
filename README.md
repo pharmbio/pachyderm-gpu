@@ -11,6 +11,7 @@ In this page we introduce how to run a simple Tensorflow GPU-enabled pipeline us
 ## Prerequisites
 
 - A Kubernetes cluster with dynamic provisioning of volumes (v 1.10+)
+- Pachyderm 1.8.2+
 - [NVIDIA drivers via package manager](https://www.nvidia.com/object/unix.html) or via [containers](https://github.com/NVIDIA/nvidia-docker/wiki/Driver-containers-(EXPERIMENTAL))
 - [nvidia-docker2 setup on your machine](https://github.com/NVIDIA/nvidia-docker)
 - [NVIDIA device plugin for Kubernetes](https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v1.10/nvidia-device-plugin.yml)
@@ -94,6 +95,19 @@ The image used in this pipeline stage is a customised tensorflow image derived f
     ]
   },
   ```
+
+Currently Pachyderm does support the latest NVIDIA Kubernetes drivers. Here it is shown how to limit GPU resources used by the pipeline:
+
+```JSON
+  "resource_limits": {
+    "memory": "2.0G",
+    "gpu": {
+      "type": "nvidia.com/gpu",
+      "number": 2
+    }
+  },
+```
+
 You can run a pipeline stage using:
 ```bash
 > pachctl create-pipeline -f <JSON file>
@@ -104,30 +118,6 @@ You can run a pipeline stage using:
 ```bash
 > kubectl get nodes -o yaml | grep gpu 
 ```
-
-> **NOTE II:** Currently Pachyderm does not support the latest NVIDIA Kubernetes drivers. This means we need to do a hack to make our pipelines request GPU resources. As of today, Pachyderm requests for `alpha.kubernetes.io/nvidia-gpu`, whereas GPU resources are defined as `nvidia.com/gpu`. Therefore, we need to replace the annotation in the replication controller of the pipeline.
-
-```bash
-> kubectl edit rc -n pachyderm <pipeline-rc-name>
-```
-```JSON
-resources:
-          limits:
-       ---> alpha.kubernetes.io/nvidia-gpu: "1"   to   nvidia.com/gpu: "1" 
-            cpu: "2"
-            memory: 2G
-          requests:
-       ---> alpha.kubernetes.io/nvidia-gpu: "1"   to   nvidia.com/gpu: "1" 
-            cpu: "0"
-            memory: 64M
-```
-Afterwards, we can delete all pods managed by our pipeline's replication controller. This will make the Kubernetes scheduler restart all pods from a given pipeline.
-
-```bash
-> kubectl delete pods -n pachyderm --selector='app=<pipeline-rc-name>'
-```
-
-
 What happens after you create a pipeline? Creating a pipeline tells Pachyderm to run your code on every finished commit in a repo as well as all future commits that happen after the pipeline is created. Our repo already had a commit, so Pachyderm automatically launched a job (Kubernetes pod) to process that data. This first time it might take some extra time since it needs to download the image from a container image registry. You can view the pipeline status and its corresponding logs using:
 ```bash
 > pachctl list-pipeline

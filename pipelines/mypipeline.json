@@ -13,11 +13,10 @@
   "standby": true,
   "resource_limits": {
     "memory": "2.0G",
-    "cpu": 2,
-    "gpu": 1
-  },
-  "resource_requests": {
-      "gpu": 1
+    "gpu": {
+      "type": "nvidia.com/gpu",
+      "number": 2
+    }
   },
   "input": {
     "atom": {

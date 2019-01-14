@@ -31,7 +31,7 @@ tar -zxvf /tmp/helm.tar.gz -C /tmp
 mv /tmp/linux-amd64/helm /usr/local/bin/helm
 
 # Install pachctl
-curl -LC - -o /tmp/pachctl.deb https://github.com/pachyderm/pachyderm/releases/download/v1.7.10/pachctl_1.7.10_amd64.deb
+curl -LC - -o /tmp/pachctl.deb https://github.com/pachyderm/pachyderm/releases/download/v1.8.2/pachctl_1.8.2_amd64.deb
 dpkg -i /tmp/pachctl.deb
 
 rm -rf ~/.minikube && rm -rf ~/.kube
